@@ -208,15 +208,15 @@
               z: jd.position.z,
             },
             quaternion: {
-              w: jd.quaternion.w,
               x: jd.quaternion.x,
               y: jd.quaternion.y,
               z: jd.quaternion.z,
+              w: jd.quaternion.w,
             },
           }
           joints.push(joint_info);
         }
-        console.log(joints);
+        console.log(JSON.stringify(joints));
 
         hand.scale.set(0.01, 0.01, 0.01);
         hand.rotation.x = - Math.PI / 2;
