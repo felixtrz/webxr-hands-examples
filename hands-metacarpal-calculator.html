@@ -21,9 +21,9 @@
     import { VRButton } from './jsm/webxr/VRButton.js';
     import { XRControllerModelFactory } from './jsm/webxr/XRControllerModelFactory.js';
     import { XRHandModelFactory } from './jsm/webxr/XRHandModelFactory.js';
-    import { OculusHandModel } from './OculusHandModel.js';
-    import { BasicButtonMesh } from './BasicButton.js';
-    import { createText } from './Text2D.js';
+    import { OculusHandModel } from './js/OculusHandModel.js';
+    import { BasicButtonMesh } from './js/BasicButton.js';
+    import { createText } from './js/Text2D.js';
     import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
     import { FBXLoader } from "./jsm/loaders/FBXLoader.js";
 
@@ -82,7 +82,7 @@
       scene.background = new THREE.Color(0x444444);
 
       camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 10);
-      camera.position.set(0, 1.6, 3);
+      camera.position.set(0, 1.6, 0);
 
 
       const floorGeometry = new THREE.PlaneGeometry(4, 4);
@@ -130,7 +130,7 @@
       const bones = [];
       loader.setPath("./models/");
       loader.load(handedness + ".fbx", (object) => {
-        object.position.set(0, 1.6, 2);
+        object.position.set(0, 1.6, -0.3);
         object.rotation.x = - Math.PI / 2;
         scene.add(object);
         // Hack because of the scale of the skinnedmesh
@@ -220,7 +220,7 @@
 
         hand.scale.set(0.01, 0.01, 0.01);
         hand.rotation.x = - Math.PI / 2;
-        hand.position.set(0, 1.4, 2);
+        hand.position.set(0, 1.4, -0.3);
         scene.add(hand);
       });
     }

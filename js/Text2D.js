@@ -1,4 +1,4 @@
-import * as THREE from "./libs/three.module.js";
+import * as THREE from "../libs/three.module.js";
 
 function createText(message, height) {
   var canvas = document.createElement("canvas");

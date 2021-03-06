@@ -1,10 +1,10 @@
-import * as THREE from "./libs/three.module.js";
+import * as THREE from "../libs/three.module.js";
 
 function BasicButtonMesh(x, y, z, color, colorOnPress) {
   this.type = "BasicButtonMesh";
 
   this.geometry = new THREE.BoxGeometry(x, y, z);
-  this.material = new THREE.MeshLambertMaterial({ color: color });
+  this.material = new THREE.MeshStandardMaterial({ color: color });
   this.pressed = false;
   this.color = color;
   this.colorOnPress = colorOnPress;

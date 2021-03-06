@@ -1,5 +1,5 @@
-import { Object3D, SphereGeometry, Sphere, Box3 } from "./libs/three.module.js";
-import { FBXLoader } from "./jsm/loaders/FBXLoader.js";
+import { Object3D, SphereGeometry, Sphere, Box3 } from "../libs/three.module.js";
+import { FBXLoader } from "../jsm/loaders/FBXLoader.js";
 
 const JOINTS = [
   "wrist",
@@ -152,6 +152,11 @@ class OculusHandModel extends Object3D {
         );
       }
     });
+
+    controller.addEventListener("disconnected", () => {
+      this.clear();
+      this.motionController = null;
+    })
   }
 
   updateMatrixWorld(force) {
