@@ -34,6 +34,8 @@ class OculusHandPointerModel extends THREE.Object3D {
     this.pointerMesh = null;
     this.pointerObject = null;
 
+    this.pinched = false;
+
     this.cursorObject = null;
 
     this.raycaster = null;
@@ -217,6 +219,8 @@ class OculusHandPointerModel extends THREE.Object3D {
     this.pointerObject.position.copy(position);
     this.pointerObject.quaternion.copy(this.controller.quaternion);
 
+    this.pinched = distance <= PINCH_THRESHOLD;
+
     const pinchScale = (distance - PINCH_MIN) / (PINCH_MAX - PINCH_MIN);
     const focusScale = (distance - PINCH_MIN) / (PINCH_THRESHOLD - PINCH_MIN);
     if (pinchScale > 1) {
@@ -262,15 +266,19 @@ class OculusHandPointerModel extends THREE.Object3D {
     }
   }
 
+  isPinched() {
+    return this.pinched;
+  }
+
   intersectObject(object) {
     if (this.raycaster) {
-      return this.raycaster.intersectObject(object);
+      return this.raycaster.intersectObject(object, true);
     }
   }
 
   intersectObjects(objects) {
     if (this.raycaster) {
-      return this.raycaster.intersectObjects(objects);
+      return this.raycaster.intersectObjects(objects, true);
     }
   }
 
