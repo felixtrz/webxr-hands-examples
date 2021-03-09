@@ -27,6 +27,7 @@
     import { createText } from './js/Text2D.js';
     import { GameObject, Component, GameObjectManager } from './js/EntityComponentSystem.js';
     import { PointerButtonComponent } from './js/PointerButtonComponent.js';
+    import { PointerDragComponent } from './js/PointerDragComponent.js';
 
     let container;
     let camera, scene, renderer;
@@ -136,49 +137,76 @@
 
       gameObjectManager = new GameObjectManager();
 
-      // buttons
-      let orangeButtonObject = gameObjectManager.createGameObject(menuObject, "orange-button");
-      let orangeButton = makeButtonMesh(0.2, 0.1, 0.01, 0xffd3b5);
-      orangeButtonObject.transform.add(orangeButton);
-      orangeButtonObject.transform.position.set(0, 0.24, 0);
-      let orangeButtonAction = function () { torusKnot.material.color.setHex(0xffd3b5); }
-      orangeButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], orangeButtonAction, null, null);
 
-      let pinkButtonObject = gameObjectManager.createGameObject(menuObject, "pink-button");
-      let pinkButton = makeButtonMesh(0.2, 0.1, 0.01, 0xe84a5f);
-      pinkButtonObject.transform.add(pinkButton);
-      pinkButtonObject.transform.position.set(0, 0.12, 0);
-      let pinkButtonAction = function () { torusKnot.material.color.setHex(0xe84a5f); }
-      pinkButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], pinkButtonAction, null, null);
+      const geometry = new THREE.BoxGeometry(0.15, 0.15, 0.15);
 
-      let resetButtonObject = gameObjectManager.createGameObject(menuObject, "exit-button");
-      let resetButton = makeButtonMesh(0.2, 0.1, 0.01, 0x355c7d);
-      let resetText = createText("reset", 0.06);
-      resetButton.add(resetText);
-      resetText.position.set(0, 0, 0.0051);
-      resetButtonObject.transform.add(resetButton);
-      resetButtonObject.transform.position.set(0, 0, 0);
-      let resetButtonAction = function () { torusKnot.material.color.setHex(0xffffff); }
-      resetButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], resetButtonAction, null, null);
+      for (let i = 0; i < 20; i++) {
 
-      let exitButtonObject = gameObjectManager.createGameObject(menuObject, "exit-button");
-      let exitButton = makeButtonMesh(0.2, 0.1, 0.01, 0xff0000);
-      let exitText = createText("exit", 0.06);
-      exitButton.add(exitText);
-      exitText.position.set(0, 0, 0.0051);
-      exitButtonObject.transform.add(exitButton);
-      exitButtonObject.transform.position.set(0, -0.12, 0);
-      let exitButtonAction = function () {
-        exitText.visible = true;
-        setTimeout(function () { exitText.visible = false; renderer.xr.getSession().end(); }, 2000);
+        const object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
+
+        let cubeObject = gameObjectManager.createGameObject(scene, "cube-"+i);
+        intersectable.push(object);
+        cubeObject.transform.add(object);
+
+        cubeObject.transform.position.x = Math.random() * 2 - 1;
+        cubeObject.transform.position.y = Math.random() * 2;
+        cubeObject.transform.position.z = Math.random() * 2 - 1;
+
+        cubeObject.transform.rotation.x = Math.random() * 2 * Math.PI;
+        cubeObject.transform.rotation.y = Math.random() * 2 * Math.PI;
+        cubeObject.transform.rotation.z = Math.random() * 2 * Math.PI;
+
+        object.scale.x = Math.random() + 0.5;
+        object.scale.y = Math.random() + 0.5;
+        object.scale.z = Math.random() + 0.5;
+
+        cubeObject.addComponent(PointerDragComponent, [handPointer1, handPointer2], menuObject);
+
       }
-      exitButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], exitButtonAction, null, null);
 
-      const tkGeometry = new THREE.TorusKnotGeometry(0.5, 0.2);
-      const tkMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
-      torusKnot = new THREE.Mesh(tkGeometry, tkMaterial);
-      torusKnot.position.set(0, 1, -5);
-      scene.add(torusKnot);
+
+      // // local
+      // let orangeButtonObject = gameObjectManager.createGameObject(menuObject, "orange-button");
+      // let orangeButton = makeButtonMesh(0.2, 0.1, 0.01, 0xffd3b5);
+      // orangeButtonObject.transform.add(orangeButton);
+      // orangeButtonObject.transform.position.set(0, 0.24, 0);
+      // let orangeButtonAction = function () { torusKnot.material.color.setHex(0xffd3b5); }
+      // orangeButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], orangeButtonAction, null, null);
+
+      // let pinkButtonObject = gameObjectManager.createGameObject(menuObject, "pink-button");
+      // let pinkButton = makeButtonMesh(0.2, 0.1, 0.01, 0xe84a5f);
+      // pinkButtonObject.transform.add(pinkButton);
+      // pinkButtonObject.transform.position.set(0, 0.12, 0);
+      // pinkButtonObject.addComponent(PointerDragComponent, [handPointer1, handPointer2], menuObject);
+
+      // let resetButtonObject = gameObjectManager.createGameObject(menuObject, "exit-button");
+      // let resetButton = makeButtonMesh(0.2, 0.1, 0.01, 0x355c7d);
+      // let resetText = createText("reset", 0.06);
+      // resetButton.add(resetText);
+      // resetText.position.set(0, 0, 0.0051);
+      // resetButtonObject.transform.add(resetButton);
+      // resetButtonObject.transform.position.set(0, 0, 0);
+      // let resetButtonAction = function () { torusKnot.material.color.setHex(0xffffff); }
+      // resetButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], resetButtonAction, null, null);
+
+      // let exitButtonObject = gameObjectManager.createGameObject(menuObject, "exit-button");
+      // let exitButton = makeButtonMesh(0.2, 0.1, 0.01, 0xff0000);
+      // let exitText = createText("exit", 0.06);
+      // exitButton.add(exitText);
+      // exitText.position.set(0, 0, 0.0051);
+      // exitButtonObject.transform.add(exitButton);
+      // exitButtonObject.transform.position.set(0, -0.12, 0);
+      // let exitButtonAction = function () {
+      //   exitText.visible = true;
+      //   setTimeout(function () { exitText.visible = false; renderer.xr.getSession().end(); }, 2000);
+      // }
+      // exitButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], exitButtonAction, null, null);
+
+      // const tkGeometry = new THREE.TorusKnotGeometry(0.5, 0.2);
+      // const tkMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+      // torusKnot = new THREE.Mesh(tkGeometry, tkMaterial);
+      // torusKnot.position.set(0, 1, -5);
+      // scene.add(torusKnot);
 
       instructionText = createText("This is a WebXR Hands demo, please explore with hands.", 0.04);
       instructionText.position.set(0, 1.6, -0.6);
@@ -212,8 +240,8 @@
 
     function render() {
       gameObjectManager.update();
-      torusKnot.rotation.x += 0.005;
-      torusKnot.rotation.y += 0.005;
+      // torusKnot.rotation.x += 0.005;
+      // torusKnot.rotation.y += 0.005;
       instructionText.visible = controllerGrip1.visible || controllerGrip2.visible;
       handPointer1.checkIntersections(intersectable);
       handPointer2.checkIntersections(intersectable);

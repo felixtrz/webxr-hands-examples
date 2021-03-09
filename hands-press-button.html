@@ -27,10 +27,6 @@
     import { GameObject, Component, GameObjectManager } from './js/EntityComponentSystem.js';
     import { PhysicalButtonComponent } from './js/PhysicalButtonComponent.js';
 
-    const FRAME_RATE = 72;
-    const ROTATION_INCREMENT = Math.PI / (FRAME_RATE * 4);
-    const SCALE_FACTOR = 0.1;
-
     let container;
     let camera, scene, renderer;
     let hand1, hand2;
@@ -130,15 +126,6 @@
       handModel2 = new OculusHandModel(hand2);
       hand2.add(handModel2);
       scene.add(hand2);
-
-      const geometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, - 1)]);
-
-      const line = new THREE.Line(geometry);
-      line.name = 'line';
-      line.scale.z = 5;
-
-      // controller1.add(line.clone());
-      // controller2.add(line.clone());
 
       gameObjectManager = new GameObjectManager();
 

@@ -1,19 +1,12 @@
 import { Component } from "./EntityComponentSystem.js";
 
-class PointerButtonComponent extends Component {
-  constructor(
-    gameObject,
-    pointers,
-    onPressAction = null,
-    onClearAction = null,
-    whilePressedAction = null
-  ) {
+class PointerDragComponent extends Component {
+  constructor(gameObject, pointers) {
     super(gameObject);
     this.pointers = pointers;
-    this.onPressAction = onPressAction;
-    this.onClearAction = onClearAction;
-    this.whilePressedAction = whilePressedAction;
-    this.pressed = false;
+    this.parent = null;
+    this.draggingPointer = null;
+    this.dragging = false;
     this.hovered = false;
   }
 
@@ -27,20 +20,22 @@ class PointerButtonComponent extends Component {
           this.hovered = true;
           if (pointer.isPinched()) {
             pressedThisFrame = true;
+            this.draggingPointer = pointer;
+            break;
           }
         }
       }
     }
     if (pressedThisFrame) {
-      if (this.whilePressedAction) this.whilePressedAction();
-      if (!this.pressed) {
-        if (this.onPressAction) this.onPressAction();
-        this.pressed = true;
+      if (!this.dragging) {
+        this.parent = this.gameObject.transform.parent;
+        this.draggingPointer.children[0].attach(this.gameObject.transform);
+        this.dragging = true;
       }
     } else {
-      if (this.pressed) {
-        if (this.onClearAction) this.onClearAction();
-        this.pressed = false;
+      if (this.dragging) {
+        this.parent.attach(this.gameObject.transform);
+        this.dragging = false;
       }
     }
     if (this.hovered) {
@@ -51,4 +46,4 @@ class PointerButtonComponent extends Component {
   }
 }
 
-export { PointerButtonComponent };
+export { PointerDragComponent };
