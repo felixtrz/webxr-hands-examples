@@ -168,8 +168,9 @@
       }
       exitButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], exitButtonAction, null, null);
 
-      const tkGeometry = new THREE.TorusKnotGeometry(0.5, 0.2);
+      const tkGeometry = new THREE.TorusKnotGeometry(0.5, 0.2, 200, 32);
       const tkMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+      tkMaterial.metalness = 0.8;
       torusKnot = new THREE.Mesh(tkGeometry, tkMaterial);
       torusKnot.position.set(0, 1, -5);
       scene.add(torusKnot);
