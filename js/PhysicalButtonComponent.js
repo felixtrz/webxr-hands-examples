@@ -46,14 +46,13 @@ class PhysicalButtonComponent extends Component {
           this.whilePressedAction();
         }
         this.gameObject.transform.position.y = this.restingY - FULL_PRESS_DISTANCE;
-      } else if (this.fullyPressed) {
-        this.fullyPressed = false;
-        this.onClearAction();
       }
     } else {
       if (this.gameObject.transform.position.y < this.restingY) {
         this.gameObject.transform.position.y += RECOVERY_SPEED;
         this.inRecovery = true;
+        this.fullyPressed = false;
+        this.onClearAction();
       } else {
         this.gameObject.transform.position.y = this.restingY;
         this.inRecovery = false;

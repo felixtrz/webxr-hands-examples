@@ -35,6 +35,7 @@
     let xrSession;
     let gameObjectManager;
     let positionCalibrated = false;
+    let buttonPressSound, buttonReleaseSound;
 
     init();
     animate();
@@ -123,6 +124,9 @@
       gameObjectManager = new GameObjectManager();
 
       // buttons
+      let buttonClearAction = function () {
+        buttonReleaseSound.play();
+      }
       const consoleGeometry = new THREE.BoxGeometry(0.5, 0.12, 0.15);
       const consoleMaterial = new THREE.MeshStandardMaterial({ color: 0x595959 });
       consoleMesh = new THREE.Mesh(consoleGeometry, consoleMaterial);
@@ -133,15 +137,21 @@
       let orangeButton = makeButtonMesh(0.08, 0.1, 0.08, 0xffd3b5);
       orangeButtonObject.transform.add(orangeButton);
       orangeButtonObject.transform.position.set(-0.15, 0.04, 0);
-      let orangeButtonAction = function () { torusKnot.material.color.setHex(0xffd3b5); }
-      orangeButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], orangeButtonAction);
+      let orangeButtonPressAction = function () {
+        buttonPressSound.play();
+        torusKnot.material.color.setHex(0xffd3b5);
+      }
+      orangeButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], orangeButtonPressAction, buttonClearAction);
 
       let pinkButtonObject = gameObjectManager.createGameObject(consoleMesh, "pink-button");
       let pinkButton = makeButtonMesh(0.08, 0.1, 0.08, 0xe84a5f);
       pinkButtonObject.transform.add(pinkButton);
       pinkButtonObject.transform.position.set(-0.05, 0.04, 0);
-      let pinkButtonAction = function () { torusKnot.material.color.setHex(0xe84a5f); }
-      pinkButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], pinkButtonAction);
+      let pinkButtonPressAction = function () {
+        buttonPressSound.play();
+        torusKnot.material.color.setHex(0xe84a5f);
+      }
+      pinkButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], pinkButtonPressAction, buttonClearAction);
 
       let resetButtonObject = gameObjectManager.createGameObject(consoleMesh, "exit-button");
       let resetButton = makeButtonMesh(0.08, 0.1, 0.08, 0x355c7d);
@@ -151,8 +161,11 @@
       resetText.position.set(0, 0.051, 0);
       resetButtonObject.transform.add(resetButton);
       resetButtonObject.transform.position.set(0.05, 0.04, 0);
-      let resetButtonAction = function () { torusKnot.material.color.setHex(0xffffff); }
-      resetButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], resetButtonAction);
+      let resetButtonPressAction = function () {
+        buttonPressSound.play();
+        torusKnot.material.color.setHex(0xffffff);
+      }
+      resetButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], resetButtonPressAction, buttonClearAction);
 
       let exitButtonObject = gameObjectManager.createGameObject(consoleMesh, "exit-button");
       let exitButton = makeButtonMesh(0.08, 0.1, 0.08, 0xff0000);
@@ -162,11 +175,12 @@
       exitText.position.set(0, 0.051, 0);
       exitButtonObject.transform.add(exitButton);
       exitButtonObject.transform.position.set(0.15, 0.04, 0);
-      let exitButtonAction = function () {
+      let exitButtonPressAction = function () {
+        buttonPressSound.play();
         exitText.visible = true;
         setTimeout(function () { exitText.visible = false; renderer.xr.getSession().end(); }, 2000);
       }
-      exitButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], exitButtonAction);
+      exitButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], exitButtonPressAction, buttonClearAction);
 
       const tkGeometry = new THREE.TorusKnotGeometry(0.5, 0.2, 200, 32);
       const tkMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
@@ -218,6 +232,22 @@
         consoleMesh.position.y = xrCamera.position.y - 0.4;
         consoleMesh.position.z = xrCamera.position.z - 0.3;
         positionCalibrated = true;
+
+        const listener = new THREE.AudioListener();
+        xrCamera.add(listener);
+
+        // create a global audio source
+        buttonPressSound = new THREE.Audio(listener);
+        buttonReleaseSound = new THREE.Audio(listener);
+
+        // load a sound and set it as the Audio object's buffer
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load('sounds/button-press.ogg', function (buffer) {
+          buttonPressSound.setBuffer(buffer);
+        });
+        audioLoader.load('sounds/button-release.ogg', function (buffer) {
+          buttonReleaseSound.setBuffer(buffer);
+        });
       }
     }
 
