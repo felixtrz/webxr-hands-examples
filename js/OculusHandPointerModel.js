@@ -17,7 +17,8 @@ const POINTER_HEMISPHERE_ANGLE = 110;
 const YAXIS = new THREE.Vector3(0, 1, 0);
 const ZAXIS = new THREE.Vector3(0, 0, 1);
 
-const CURSOR_RADIUS = 0.02
+const CURSOR_RADIUS = 0.02;
+const CURSOR_MAX_DISTANCE = 1.5;
 
 class OculusHandPointerModel extends THREE.Object3D {
   constructor(hand, controller) {
@@ -191,7 +192,6 @@ class OculusHandPointerModel extends THREE.Object3D {
     cursorMaterial.opacity = POINTER_OPACITY_MIN;
 
     this.cursorObject = new THREE.Mesh(cursorGeometry, cursorMaterial);
-    this.cursorObject.visible = false;
     this.pointerObject.add(this.cursorObject);
 
     this.add(this.pointerObject);
@@ -262,7 +262,6 @@ class OculusHandPointerModel extends THREE.Object3D {
     if (this.pointerGeometry) {
       this._updatePointer();
       this._updateRaycaster();
-      // this.pointerGeometry.attributes.position.needsUpdate = true;
     }
   }
 
@@ -285,15 +284,13 @@ class OculusHandPointerModel extends THREE.Object3D {
   checkIntersections(objects) {
     if (this.raycaster) {
       let intersections = this.raycaster.intersectObjects(objects);
+      let direction = new THREE.Vector3(0,0,-1);
       if (intersections.length > 0) {
         let intersection = intersections[0];
-        let object = intersection.object;
         let distance = intersection.distance;
-        let direction = new THREE.Vector3(0,0,-1);
         this.cursorObject.position.copy(direction.multiplyScalar(distance));
-        this.cursorObject.visible = true;
       } else {
-        this.cursorObject.visible = false;
+        this.cursorObject.position.copy(direction.multiplyScalar(CURSOR_MAX_DISTANCE));
       }
     }
   }
