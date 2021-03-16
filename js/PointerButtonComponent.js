@@ -18,20 +18,22 @@ class PointerButtonComponent extends Component {
   }
 
   update() {
-    let pressedThisFrame = false;
+    let pinchedPointer = null;
     this.hovered = false;
     for (let pointer of this.pointers) {
       if (pointer) {
         let intersections = pointer.intersectObject(this.gameObject.transform);
         if (intersections && intersections.length > 0) {
-          this.hovered = true;
-          if (pointer.isPinched()) {
-            pressedThisFrame = true;
+          if (!pointer.isAttached()) {
+            this.hovered = true;
+            if (pointer.isPinched()) {
+              pinchedPointer = pointer;
+            }
           }
         }
       }
     }
-    if (pressedThisFrame) {
+    if (pinchedPointer != null) {
       if (this.whilePressedAction) this.whilePressedAction();
       if (!this.pressed) {
         if (this.onPressAction) this.onPressAction();

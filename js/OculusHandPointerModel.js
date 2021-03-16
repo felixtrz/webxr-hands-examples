@@ -1,5 +1,4 @@
 import * as THREE from "../libs/three.module.js";
-import { FBXLoader } from "../jsm/loaders/FBXLoader.js";
 
 const PINCH_MAX = 0.05;
 const PINCH_THRESHOLD = 0.02;
@@ -36,6 +35,7 @@ class OculusHandPointerModel extends THREE.Object3D {
     this.pointerObject = null;
 
     this.pinched = false;
+    this.attached = false;
 
     this.cursorObject = null;
 
@@ -269,6 +269,14 @@ class OculusHandPointerModel extends THREE.Object3D {
     return this.pinched;
   }
 
+  setAttached(attached) {
+    this.attached = attached;
+  }
+
+  isAttached() {
+    return this.attached;
+  }
+
   intersectObject(object) {
     if (this.raycaster) {
       return this.raycaster.intersectObject(object, true);
@@ -282,7 +290,7 @@ class OculusHandPointerModel extends THREE.Object3D {
   }
 
   checkIntersections(objects) {
-    if (this.raycaster) {
+    if (this.raycaster && !this.attached) {
       let intersections = this.raycaster.intersectObjects(objects);
       let direction = new THREE.Vector3(0,0,-1);
       if (intersections.length > 0) {
