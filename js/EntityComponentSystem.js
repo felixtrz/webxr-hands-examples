@@ -92,6 +92,8 @@ class GameObjectManager {
     return gameObject;
   }
   removeGameObject(gameObject) {
+    console.log(gameObject.transform);
+    gameObject.transform.parent.remove(gameObject.transform);
     this.gameObjects.remove(gameObject);
   }
   update() {

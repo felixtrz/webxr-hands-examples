@@ -20,8 +20,6 @@
     import * as THREE from './libs/three.module.js';
     import { VRButton } from './jsm/webxr/VRButton.js';
     import { XRControllerModelFactory } from './jsm/webxr/XRControllerModelFactory.js';
-    import { XRHandModelFactory } from './jsm/webxr/XRHandModelFactory.js';
-    import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
     import { OculusHandModel } from './js/OculusHandModel.js';
     import { OculusHandPointerModel } from './js/OculusHandPointerModel.js';
     import { createText } from './js/Text2D.js';
@@ -33,11 +31,11 @@
     let hand1, hand2;
     let handModel1, handModel2;
     let handPointer1, handPointer2;
-    let consoleObject, torusKnot, instructionText, exitText;
+    let menuObject, torusKnot, instructionText, exitText;
     let controller1, controller2;
     let controllerGrip1, controllerGrip2;
-    let xrSession;
     let gameObjectManager;
+    let positionCalibrated = false;
     let intersectable = [];
 
     init();
@@ -70,13 +68,9 @@
       floor.rotation.x = - Math.PI / 2;
       floor.receiveShadow = true;
       scene.add(floor);
+      intersectable.push(floor);
 
       scene.add(new THREE.HemisphereLight(0x808080, 0x606060));
-
-      const menuObject = new THREE.Object3D();
-      menuObject.position.set(0.4, 1, -1);
-      menuObject.rotation.y = - Math.PI / 12;
-      scene.add(menuObject);
 
       const light = new THREE.DirectionalLight(0xffffff);
       light.position.set(0, 6, 0);
@@ -137,17 +131,22 @@
       gameObjectManager = new GameObjectManager();
 
       // buttons
+      menuObject = new THREE.Object3D();
+      menuObject.position.set(0.4, 1, -1);
+      menuObject.rotation.y = - Math.PI / 12;
+      scene.add(menuObject);
+      
       let orangeButtonObject = gameObjectManager.createGameObject(menuObject, "orange-button");
       let orangeButton = makeButtonMesh(0.2, 0.1, 0.01, 0xffd3b5);
       orangeButtonObject.transform.add(orangeButton);
-      orangeButtonObject.transform.position.set(0, 0.24, 0);
+      orangeButtonObject.transform.position.set(0, 0.18, 0);
       let orangeButtonAction = function () { torusKnot.material.color.setHex(0xffd3b5); }
       orangeButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], orangeButtonAction, null, null);
 
       let pinkButtonObject = gameObjectManager.createGameObject(menuObject, "pink-button");
       let pinkButton = makeButtonMesh(0.2, 0.1, 0.01, 0xe84a5f);
       pinkButtonObject.transform.add(pinkButton);
-      pinkButtonObject.transform.position.set(0, 0.12, 0);
+      pinkButtonObject.transform.position.set(0, 0.06, 0);
       let pinkButtonAction = function () { torusKnot.material.color.setHex(0xe84a5f); }
       pinkButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], pinkButtonAction, null, null);
 
@@ -157,7 +156,7 @@
       resetButton.add(resetText);
       resetText.position.set(0, 0, 0.0051);
       resetButtonObject.transform.add(resetButton);
-      resetButtonObject.transform.position.set(0, 0, 0);
+      resetButtonObject.transform.position.set(0, -0.06, 0);
       let resetButtonAction = function () { torusKnot.material.color.setHex(0xffffff); }
       resetButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], resetButtonAction, null, null);
 
@@ -167,7 +166,7 @@
       exitButton.add(exitText);
       exitText.position.set(0, 0, 0.0051);
       exitButtonObject.transform.add(exitButton);
-      exitButtonObject.transform.position.set(0, -0.12, 0);
+      exitButtonObject.transform.position.set(0, -0.18, 0);
       let exitButtonAction = function () {
         exitText.visible = true;
         setTimeout(function () { exitText.visible = false; renderer.xr.getSession().end(); }, 2000);
@@ -219,6 +218,15 @@
       handPointer1.checkIntersections(intersectable);
       handPointer2.checkIntersections(intersectable);
       renderer.render(scene, camera);
+
+      // adjusting console position when user first go immersive
+      if (renderer.xr.getSession() && !positionCalibrated) {
+        let xrCamera = renderer.xr.getCamera(camera);
+        menuObject.position.x = xrCamera.position.x + 0.4;
+        menuObject.position.y = xrCamera.position.y;
+        menuObject.position.z = xrCamera.position.z - 1;
+        positionCalibrated = true;
+      }
     }
 
   </script>
