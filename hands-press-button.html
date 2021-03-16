@@ -134,14 +134,14 @@
       orangeButtonObject.transform.add(orangeButton);
       orangeButtonObject.transform.position.set(-0.15, 0.04, 0);
       let orangeButtonAction = function () { torusKnot.material.color.setHex(0xffd3b5); }
-      orangeButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], orangeButtonAction, null, null);
+      orangeButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], orangeButtonAction);
 
       let pinkButtonObject = gameObjectManager.createGameObject(consoleMesh, "pink-button");
       let pinkButton = makeButtonMesh(0.08, 0.1, 0.08, 0xe84a5f);
       pinkButtonObject.transform.add(pinkButton);
       pinkButtonObject.transform.position.set(-0.05, 0.04, 0);
       let pinkButtonAction = function () { torusKnot.material.color.setHex(0xe84a5f); }
-      pinkButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], pinkButtonAction, null, null);
+      pinkButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], pinkButtonAction);
 
       let resetButtonObject = gameObjectManager.createGameObject(consoleMesh, "exit-button");
       let resetButton = makeButtonMesh(0.08, 0.1, 0.08, 0x355c7d);
@@ -152,7 +152,7 @@
       resetButtonObject.transform.add(resetButton);
       resetButtonObject.transform.position.set(0.05, 0.04, 0);
       let resetButtonAction = function () { torusKnot.material.color.setHex(0xffffff); }
-      resetButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], resetButtonAction, null, null);
+      resetButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], resetButtonAction);
 
       let exitButtonObject = gameObjectManager.createGameObject(consoleMesh, "exit-button");
       let exitButton = makeButtonMesh(0.08, 0.1, 0.08, 0xff0000);
@@ -166,7 +166,7 @@
         exitText.visible = true;
         setTimeout(function () { exitText.visible = false; renderer.xr.getSession().end(); }, 2000);
       }
-      exitButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], exitButtonAction, null, null);
+      exitButtonObject.addComponent(PhysicalButtonComponent, [handModel1, handModel2], exitButtonAction);
 
       const tkGeometry = new THREE.TorusKnotGeometry(0.5, 0.2, 200, 32);
       const tkMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });

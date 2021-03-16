@@ -1,19 +1,22 @@
 import { Component } from "./EntityComponentSystem.js";
 
+const FULL_PRESS_DISTANCE = 0.02;
+const RECOVERY_SPEED = 0.005;
+
 class PhysicalButtonComponent extends Component {
   constructor(
     gameObject,
     hands,
-    onPressAction = null,
-    onClearAction = null,
-    whilePressedAction = null
+    onPressAction = () => { },
+    onClearAction = () => { },
+    whilePressedAction = () => { }
   ) {
     super(gameObject);
     this.hands = hands;
     this.onPressAction = onPressAction;
     this.onClearAction = onClearAction;
     this.whilePressedAction = whilePressedAction;
-    this.pressed = false;
+    this.fullyPressed = false;
     this.inRecovery = false;
     this.restingY = this.gameObject.transform.position.y;
   }
@@ -28,30 +31,28 @@ class PhysicalButtonComponent extends Component {
       }
     }
     pressedThisFrame &= !this.inRecovery;
-    if (pressedThisFrame) {
-      if (this.whilePressedAction) this.whilePressedAction();
-      if (!this.pressed) {
-        if (this.onPressAction) this.onPressAction();
-        this.pressed = true;
-      }
-    } else {
-      if (this.pressed) {
-        if (this.onClearAction) this.onClearAction();
-        this.pressed = false;
-      }
-    }
+
     if (pressedThisFrame) {
       let pressingDistance =
         0.05 - this.gameObject.transform.worldToLocal(pressingPosition).y;
       if (pressingDistance > 0) {
         this.gameObject.transform.position.y -= pressingDistance;
       }
-      if (this.gameObject.transform.position.y < this.restingY - 0.02) {
-        this.gameObject.transform.position.y = this.restingY - 0.02;
+      if (this.gameObject.transform.position.y <= this.restingY - FULL_PRESS_DISTANCE) {
+        if (!this.fullyPressed) {
+          this.fullyPressed = true;
+          this.onPressAction();
+        } else {
+          this.whilePressedAction();
+        }
+        this.gameObject.transform.position.y = this.restingY - FULL_PRESS_DISTANCE;
+      } else if (this.fullyPressed) {
+        this.fullyPressed = false;
+        this.onClearAction();
       }
     } else {
       if (this.gameObject.transform.position.y < this.restingY) {
-        this.gameObject.transform.position.y += 0.005;
+        this.gameObject.transform.position.y += RECOVERY_SPEED;
         this.inRecovery = true;
       } else {
         this.gameObject.transform.position.y = this.restingY;
