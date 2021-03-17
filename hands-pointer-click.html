@@ -31,7 +31,7 @@
     let hand1, hand2;
     let handModel1, handModel2;
     let handPointer1, handPointer2;
-    let menuObject, torusKnot, instructionText, exitText;
+    let menuMesh, torusKnot, instructionText, exitText;
     let controller1, controller2;
     let controllerGrip1, controllerGrip2;
     let gameObjectManager;
@@ -131,26 +131,32 @@
       gameObjectManager = new GameObjectManager();
 
       // buttons
-      menuObject = new THREE.Object3D();
-      menuObject.position.set(0.4, 1, -1);
-      menuObject.rotation.y = - Math.PI / 12;
-      scene.add(menuObject);
-      
-      let orangeButtonObject = gameObjectManager.createGameObject(menuObject, "orange-button");
+      const menuGeometry = new THREE.PlaneGeometry(0.24, 0.5);
+      const menuMaterial = new THREE.MeshStandardMaterial({
+        opacity: 0,
+        transparent: true,
+      });
+      menuMesh = new THREE.Mesh(menuGeometry, menuMaterial);
+      menuMesh.position.set(0.4, 1, -1);
+      menuMesh.rotation.y = - Math.PI / 12;
+      scene.add(menuMesh);
+      intersectable.push(menuMesh);
+
+      let orangeButtonObject = gameObjectManager.createGameObject(menuMesh, "orange-button");
       let orangeButton = makeButtonMesh(0.2, 0.1, 0.01, 0xffd3b5);
       orangeButtonObject.transform.add(orangeButton);
       orangeButtonObject.transform.position.set(0, 0.18, 0);
       let orangeButtonAction = function () { torusKnot.material.color.setHex(0xffd3b5); }
       orangeButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], orangeButtonAction, null, null);
 
-      let pinkButtonObject = gameObjectManager.createGameObject(menuObject, "pink-button");
+      let pinkButtonObject = gameObjectManager.createGameObject(menuMesh, "pink-button");
       let pinkButton = makeButtonMesh(0.2, 0.1, 0.01, 0xe84a5f);
       pinkButtonObject.transform.add(pinkButton);
       pinkButtonObject.transform.position.set(0, 0.06, 0);
       let pinkButtonAction = function () { torusKnot.material.color.setHex(0xe84a5f); }
       pinkButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], pinkButtonAction, null, null);
 
-      let resetButtonObject = gameObjectManager.createGameObject(menuObject, "exit-button");
+      let resetButtonObject = gameObjectManager.createGameObject(menuMesh, "exit-button");
       let resetButton = makeButtonMesh(0.2, 0.1, 0.01, 0x355c7d);
       let resetText = createText("reset", 0.06);
       resetButton.add(resetText);
@@ -160,7 +166,7 @@
       let resetButtonAction = function () { torusKnot.material.color.setHex(0xffffff); }
       resetButtonObject.addComponent(PointerButtonComponent, [handPointer1, handPointer2], resetButtonAction, null, null);
 
-      let exitButtonObject = gameObjectManager.createGameObject(menuObject, "exit-button");
+      let exitButtonObject = gameObjectManager.createGameObject(menuMesh, "exit-button");
       let exitButton = makeButtonMesh(0.2, 0.1, 0.01, 0xff0000);
       let exitText = createText("exit", 0.06);
       exitButton.add(exitText);
@@ -222,9 +228,9 @@
       // adjusting console position when user first go immersive
       if (renderer.xr.getSession() && !positionCalibrated) {
         let xrCamera = renderer.xr.getCamera(camera);
-        menuObject.position.x = xrCamera.position.x + 0.4;
-        menuObject.position.y = xrCamera.position.y;
-        menuObject.position.z = xrCamera.position.z - 1;
+        menuMesh.position.x = xrCamera.position.x + 0.4;
+        menuMesh.position.y = xrCamera.position.y;
+        menuMesh.position.z = xrCamera.position.z - 1;
         positionCalibrated = true;
       }
     }
