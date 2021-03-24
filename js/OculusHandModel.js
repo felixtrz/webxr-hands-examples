@@ -40,7 +40,7 @@ class XRHandOculusMeshModel {
     const loader = new FBXLoader();
 
     loader.setPath("./models/");
-    loader.load(handedness + ".fbx", (object) => {
+    loader.load(handedness + "_new.fbx", (object) => {
       this.handModel.add(object);
       // Hack because of the scale of the skinnedmesh
       object.scale.setScalar(0.01);
@@ -58,19 +58,19 @@ class XRHandOculusMeshModel {
         "b_%_thumb3", // XRHand.THUMB_PHALANX_DISTAL,
         "b_%_thumb_null", // XRHand.THUMB_PHALANX_TIP,
 
-        null, //'b_%_index0', // XRHand.INDEX_METACARPAL,
+        'b_%_index0', // XRHand.INDEX_METACARPAL,
         "b_%_index1", // XRHand.INDEX_PHALANX_PROXIMAL,
         "b_%_index2", // XRHand.INDEX_PHALANX_INTERMEDIATE,
         "b_%_index3", // XRHand.INDEX_PHALANX_DISTAL,
         "b_%_index_null", // XRHand.INDEX_PHALANX_TIP,
 
-        null, //'b_%_middle0', // XRHand.MIDDLE_METACARPAL,
+        'b_%_middle0', // XRHand.MIDDLE_METACARPAL,
         "b_%_middle1", // XRHand.MIDDLE_PHALANX_PROXIMAL,
         "b_%_middle2", // XRHand.MIDDLE_PHALANX_INTERMEDIATE,
         "b_%_middle3", // XRHand.MIDDLE_PHALANX_DISTAL,
         "b_%_middlenull", // XRHand.MIDDLE_PHALANX_TIP,
 
-        null, //'b_%_ring0', // XRHand.RING_METACARPAL,
+        'b_%_ring0', // XRHand.RING_METACARPAL,
         "b_%_ring1", // XRHand.RING_PHALANX_PROXIMAL,
         "b_%_ring2", // XRHand.RING_PHALANX_INTERMEDIATE,
         "b_%_ring3", // XRHand.RING_PHALANX_DISTAL,
