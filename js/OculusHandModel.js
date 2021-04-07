@@ -47,8 +47,8 @@ class XRHandOculusMeshModel {
 
       const mesh = object.getObjectByProperty("type", "SkinnedMesh");
       mesh.frustumCulled = false;
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
+      // mesh.castShadow = true;
+      // mesh.receiveShadow = true;
 
       const bonesMapping = [
         "b_%_wrist", // XRHand.WRIST,
