@@ -15,7 +15,7 @@ class PointerDragComponent extends Component {
     let pinchedPointer = null;
     for (let pointer of this.pointers) {
       if (pointer) {
-        let intersections = pointer.intersectObject(this.gameObject.transform);
+        let intersections = pointer.intersectObject(this.gameObject.transform, true);
         if (intersections && intersections.length > 0) {
           this.hovered = !pointer.isAttached();
           if (pointer.isPinched()) {

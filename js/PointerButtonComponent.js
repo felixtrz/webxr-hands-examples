@@ -22,7 +22,7 @@ class PointerButtonComponent extends Component {
     this.hovered = false;
     for (let pointer of this.pointers) {
       if (pointer) {
-        let intersections = pointer.intersectObject(this.gameObject.transform);
+        let intersections = pointer.intersectObject(this.gameObject.transform, true);
         if (intersections && intersections.length > 0) {
           if (!pointer.isAttached()) {
             this.hovered = true;

@@ -277,22 +277,22 @@ class OculusHandPointerModel extends THREE.Object3D {
     return this.attached;
   }
 
-  intersectObject(object) {
+  intersectObject(object, deep=false) {
     if (this.raycaster) {
-      return this.raycaster.intersectObject(object, true);
+      return this.raycaster.intersectObject(object, deep);
     }
   }
 
-  intersectObjects(objects) {
+  intersectObjects(objects, deep=false) {
     if (this.raycaster) {
-      return this.raycaster.intersectObjects(objects, true);
+      return this.raycaster.intersectObjects(objects, deep);
     }
   }
 
   checkIntersections(objects) {
     if (this.raycaster && !this.attached) {
       let intersections = this.raycaster.intersectObjects(objects);
-      let direction = new THREE.Vector3(0,0,-1);
+      let direction = new THREE.Vector3(0, 0, -1);
       if (intersections.length > 0) {
         let intersection = intersections[0];
         let distance = intersection.distance;
@@ -300,6 +300,13 @@ class OculusHandPointerModel extends THREE.Object3D {
       } else {
         this.cursorObject.position.copy(direction.multiplyScalar(CURSOR_MAX_DISTANCE));
       }
+    }
+  }
+
+  setCursor(distance) {
+    let direction = new THREE.Vector3(0, 0, -1);
+    if (this.raycaster && !this.attached) {
+      this.cursorObject.position.copy(direction.multiplyScalar(distance));
     }
   }
 }

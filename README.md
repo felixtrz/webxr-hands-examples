@@ -2,9 +2,9 @@
 > A collection of THREE.js examples that demonstrate more advanced usage of WebXR hands
 
 ## Examples
-- [Button Press Example](./hands-press-button.html) - Using collision detection to trigger events when user press down button
-- [Point-and-Click Example](./hands-pointer-click.html) - Using a droplet-shaped target ray to point and click on buttons in the scene
-- [Point-and-Drag Example](./hands-pointer-drag.html) - Using a droplet-shaped target ray to drag and drop objects in the scene
+- Button Press Example with [MonoBehavior-like ECS](./hands-press-button.html) & [ECSY](./hands-press-button-ecsy.html) - Using collision detection to trigger events when user press down button
+- Point-and-Click Example with [MonoBehavior-like ECS](./hands-pointer-click.html) & [ECSY](./hands-pointer-click-ecsy.html) - Using a droplet-shaped target ray to point and click on buttons in the scene
+- Point-and-Drag Example with [MonoBehavior-like ECS](./hands-pointer-drag.html) & [ECSY](./hands-pointer-drag-ecsy.html) - Using a droplet-shaped target ray to drag and drop objects in the scene
 
 ## Related resources
 - [WebXR Hand Input Module](https://www.w3.org/TR/webxr-hand-input-1/) - Draft API specs of WebXR hands
